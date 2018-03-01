@@ -1,0 +1,44 @@
+LambdaでJavaのAPIを実装するための方針
+
+【実装方針】
+https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/java-programming-model.html
+
+・使用ライブラリは?
+aws-lambda-java-coreを使う
+
+・API毎に１つずつjarを作成する方針か？
+
+・単体レベルの動作確認は？
+
+
+【モジュール管理方針】
+・jar生成について
+→ビルドツール(mavenかgradle)を使う
+https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/lambda-java-how-to-create-deployment-package.html
+
+・jarファイルの管理について
+→LambdaではコンソールからのアップロードとS3からのアップロードとある
+ S3からのアップロードを推奨する
+ 理由) S3のバージョニング機能を使う事でバージョン管理ができ、過去のjarに戻す事が可能となるため。
+バージョン管理について) https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/Versioning.html
+
+【懸念点】
+・パフォーマンスについて
+JavaでのLambdaの実装はパフォーマンスに不安がある。
+Node.jsやPythonに比べて性能面で劣る
+
+http://acro-engineer.hatenablog.com/entry/2016/08/02/120000
+
+1つAPIを実装した段階で性能試験をしたほうがよいのでは？
+
+
+【負荷試験実装方針】
+・EC2から負荷試験ツールで負荷をかける
+→AWS環境外からだと事前申請が必要
+
+・負荷試験ツールは？
+apache bench, jmeter
+
+・参考
+https://qiita.com/horsewin/items/b48a81f11ed053c9cfab
+wrkというツールがよいらしい。
